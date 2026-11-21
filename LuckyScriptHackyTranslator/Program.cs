@@ -13,15 +13,17 @@ public class Program
         
         [Option('o', "out", Required = false, HelpText = "Output File")]
         public string? OutFile { get; set; }
-        
-        
+
+        [Option('i', "ignoreNonJapanese", Required = false,
+            HelpText = "Ignores english strings (usually filenames etc) when generating the translation text file")]
+        public bool IgnoreEnglish { get; set; } = false;
     }
     
     static void RunOptions(Options opts)
     {
         //handle options
         if (opts.TranslationFile == null)
-            CreateTranslationFile(opts.ScriptFile, opts.OutFile);
+            CreateTranslationFile(opts.ScriptFile, opts.OutFile, opts.IgnoreEnglish);
         else
             TranslateScriptFromFile(opts.ScriptFile, opts.TranslationFile, opts.OutFile);
         
@@ -67,13 +69,13 @@ public class Program
 
     }
     
-    static void CreateTranslationFile(string scriptPath, string? outPath = null)
+    static void CreateTranslationFile(string scriptPath, string? outPath = null, bool ignoreEnglish = false)
     {
         if (outPath == null)
             outPath = scriptPath.Replace(".sd", "") + ".txt";
         
         using BinaryReader br = new BinaryReader(new FileStream(scriptPath, FileMode.Open));
-        var entries  =  DialogueReader.FindDialogues(br);
+        var entries  =  DialogueReader.FindDialogues(br, ignoreEnglish);
         br.Close();
         
         using StreamWriter writer = new StreamWriter(new FileStream(outPath, FileMode.Create));
