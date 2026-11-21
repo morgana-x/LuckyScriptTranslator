@@ -14,7 +14,7 @@ public class Program
         [Option('o', "out", Required = false, HelpText = "Output File")]
         public string? OutFile { get; set; }
 
-        [Option('i', "ignoreNonJapanese", Required = false,
+        [Option('i', "ignoreenglish", Required = false,
             HelpText = "Ignores english strings (usually filenames etc) when generating the translation text file")]
         public bool IgnoreEnglish { get; set; } = false;
     }
