@@ -1,6 +1,6 @@
 ﻿namespace LuckyScriptHackyTranslator;
 
-public class DialogueFinder
+public class DialogueReader
 {
     public static DialogueEntry? FindNextDialogue(BinaryReader r)
     {
@@ -51,4 +51,6 @@ public class DialogueFinder
 
         return entries;
     }
+
+  
 }
