@@ -41,13 +41,10 @@ public class Program
             return;
         }
 
-        if (args.Length == 2) // gen new script  from og + translation file
+        if (args.Length == 2 && (args[0].EndsWith(".sd") || args[0].EndsWith(".txt"))) // gen new script  from og + translation file
         {
             string sdFile;
             string txtFile;
-
-            if (!args[0].EndsWith(".sd") && !args[0].EndsWith(".txt"))
-                return;
 
             if (args[0].EndsWith(".sd"))
             {
