@@ -15,7 +15,7 @@ Drag and drop both the original .sd file and the .txt file to generate a new sd 
 -s, --script       (Required) Script Filepath
 -t --translation   (Optional) Translation Filepath
 -o, --out          (Optional) Out Filepath
--i --ignoreEnglish (Optional) Ignore English Only strings (usually filenames) when generating the translation text file
+-i --ignoreenglish (Optional) Ignore English Only strings (usually filenames) when generating the translation text file
 ```
 
 Supplying just a script will generate a translation filepath, optionally can supply the out path
