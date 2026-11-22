@@ -69,12 +69,12 @@ public class DialogueReplacer
             
             int offset =  e.Original.Length - ((int)temp.Length);
             
-            /*
+            
             if (offset != 0)
             {
                 var start = pos + e.Original.Length;
                 MoveChunk(stream, start, start - offset );
-            }*/
+            }
             
             
 
@@ -82,5 +82,13 @@ public class DialogueReplacer
             temp.Position = 0;
             temp.CopyTo(stream);
         }
+
+        uint fileSize = (uint)stream.Length;
+
+        stream.Position = 8;
+        // Write new size of file
+        stream.Write(BitConverter.GetBytes(fileSize));
     }
+    
+   
 }

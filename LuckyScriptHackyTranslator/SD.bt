@@ -1,0 +1,60 @@
+//------------------------------------------------
+//--- 010 Editor v14.0 Binary Template
+//
+//      File: SD / ELSC
+//   Authors: morgana
+//   Version: 
+//   Purpose: 
+//  Category: Game
+// File Mask: *.sd
+//  ID Bytes: 45 4C 53 43
+//   History: 
+//------------------------------------------------
+
+typedef struct SubScriptDef
+{
+        string name <bgcolor=0x55ffaa>;
+        
+        local int b2;
+        while (FTell() < FileSize()) {
+            b2 = ReadByte();
+            if (b2 != 0 || b2 == -1) { break; }
+            FSeek(FTell() + 1);
+        }
+             
+        ushort startPos <bgcolor=0xffaa55>;
+        ushort unk3;
+        local int pos = FTell();
+        
+        FSeek(startPos);
+        
+        byte startingByte;
+        
+        FSeek(pos);
+};
+
+struct SDHeaderStruct
+{
+    char Identifier[4] <bgcolor=0xffaaff>;
+    int Version <bgcolor=0xaaffff>;
+    int FileSize <bgcolor=0xffffaa>;
+    short unk;
+    short unk2 <bgcolor=0xff44aa>;
+    int unk3[6];
+    int subScriptDefsPointer <bgcolor=0xffaaaa>;
+    ushort startingOpcodePointer <bgcolor=0xaaaaff>;
+    ushort unk4;
+    
+} SDHeader <bgcolor=0xaaaaaa>;
+
+FSeek(SDHeader.startingOpcodePointer);
+byte startingOpcode <bgcolor=0xaaaaff>;
+
+FSeek(SDHeader.subScriptDefsPointer);
+
+int numScripts <bgcolor=0xffaaaa>;
+
+ushort scriptDefStart;
+FSeek(scriptDefStart);
+
+SubScriptDef subScripts[numScripts] <optimize=false>;
