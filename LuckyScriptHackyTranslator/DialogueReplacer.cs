@@ -36,7 +36,7 @@ public class DialogueReplacer
 
             byte[] bytes = Util.ShiftJis.GetShiftJis().GetBytes(e.Translation);
             
-            if (bytes.SequenceEqual(e.Original.Skip(2)))
+            if (e.Original.Length > 2 && bytes.SequenceEqual(e.Original.Skip(2)))
                 continue;
             
             using MemoryStream temp = new MemoryStream();
