@@ -56,15 +56,11 @@ public class DialogueEntry
             if (pattern == null)
                 break;
                 
-            Console.WriteLine(pattern);
-                
             string? translation = SkipCommentsWhiteSpace(sr);
              
             if (translation == null)
                 break;
-                
-            Console.WriteLine(translation);
-                
+            
             entries.Add(new DialogueEntry(Convert.FromHexString(pattern.Trim()), translation));
         }
 

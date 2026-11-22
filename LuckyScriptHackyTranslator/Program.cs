@@ -17,20 +17,28 @@ public class Program
         [Option('i', "ignoreenglish", Required = false,
             HelpText = "Ignores english strings (usually filenames etc) when generating the translation text file")]
         public bool IgnoreEnglish { get; set; } = false;
+        
+        [Option('h', "silent", Required = false)]
+        public bool Silent { get; set; } = false;
     }
+
+    private static bool _silent = false;
     
     static void RunOptions(Options opts)
     {
+        _silent = opts.Silent;
+        
         //handle options
         if (opts.TranslationFile == null)
             CreateTranslationFile(opts.ScriptFile, opts.OutFile, opts.IgnoreEnglish);
         else
             TranslateScriptFromFile(opts.ScriptFile, opts.TranslationFile, opts.OutFile);
-        
     }
-    static void HandleParseError(IEnumerable<Error> errs)
+
+    public static void Log(string msg)
     {
-        //handle errors
+        if (!_silent)
+            Console.WriteLine("[LST] " + msg);
     }
     
     public static void Main(string[] args)
@@ -86,9 +94,7 @@ public class Program
     static void TranslateScriptFromFile(string scriptPath, string translationFilePath, string? outScriptPath = null)
     {
         if (outScriptPath == null)
-        {
             outScriptPath = scriptPath.Replace(".sd", "") + "_translated.sd";
-        }
         
         MemoryStream virtualScript = new MemoryStream();
         virtualScript.Write(File.ReadAllBytes(scriptPath));
