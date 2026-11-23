@@ -12,18 +12,26 @@ public class DialogueReader
         if (r.BaseStream.Position >= r.BaseStream.Length)
             return null;
 
+        var start = r.BaseStream.Position;
+        
         int length = r.ReadUInt16();
 
         if (length < 1)
+        {
+            r.BaseStream.Position = start;
             return null;
-        
+        }
+
         byte[] bytes = r.ReadBytes(length);
 
         bool hasJapanese = false;
         for (int i = 0; i < length - 1; i++)
         {
             if (bytes[i] == 0)
+            {
+                r.BaseStream.Position = start;
                 return null;
+            }
 
             if (bytes[i] >= 0x81)
                 hasJapanese = true;
@@ -35,7 +43,10 @@ public class DialogueReader
         string msg = Util.ShiftJis.GetShiftJis().GetString(bytes);
 
         if (msg.Trim().IsWhiteSpace() || msg.Trim().Length == 0)
+        {
+            r.BaseStream.Position = start;
             return null;
+        }
 
 
         r.BaseStream.Position = r.BaseStream.Position - length - 2;
