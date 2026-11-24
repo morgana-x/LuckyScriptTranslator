@@ -13,48 +13,46 @@
 
 typedef struct SubScriptDef
 {
-        string name <bgcolor=0x55ffaa>;
-        
-        local int b2;
-        while (FTell() < FileSize()) {
-            b2 = ReadByte();
-            if (b2 != 0 || b2 == -1) { break; }
-            FSeek(FTell() + 1);
+      
+        char name[28] <bgcolor=0x55ffaa>;
+           
+        uint startPos <bgcolor=0xffaa55>;
+            
+        if (startPos < FileSize())
+        {
+            local int returnP = FTell();
+            FSeek(startPos);
+            byte startingByte <bgcolor=0x00ffff>;
+            FSeek(returnP);
         }
-             
-        ushort startPos <bgcolor=0xffaa55>;
-        ushort unk3;
-        local int pos = FTell();
-        
-        FSeek(startPos);
-        
-        byte startingByte;
-        
-        FSeek(pos);
+       
 };
 
 struct SDHeaderStruct
 {
-    char Identifier[4] <bgcolor=0xffaaff>;
-    int Version <bgcolor=0xaaffff>;
+    char Identifier[8] <bgcolor=0xffaaff>;
+    
     int FileSize <bgcolor=0xffffaa>;
-    short unk;
-    short unk2 <bgcolor=0xff44aa>;
-    int unk3[6];
-    int subScriptDefsPointer <bgcolor=0xffaaaa>;
-    ushort startingOpcodePointer <bgcolor=0xaaaaff>;
-    ushort unk4;
+    
+    short Version;
+    
+    short Unknown <bgcolor=0xff44aa>;
+    
+    int padding[6];
+    
+    uint funcsPointer <bgcolor=0xffaaaa>;
+    uint entryPointer <bgcolor=0xaaaaff>;
     
 } SDHeader <bgcolor=0xaaaaaa>;
 
-FSeek(SDHeader.startingOpcodePointer);
-byte startingOpcode <bgcolor=0xaaaaff>;
+FSeek(SDHeader.entryPointer);
+byte startingOpcode <bgcolor=0x1111ff>;
 
-FSeek(SDHeader.subScriptDefsPointer);
+FSeek(SDHeader.funcsPointer);
 
-int numScripts <bgcolor=0xffaaaa>;
+int numFuncs <bgcolor=0xffaaaa>;
 
-ushort scriptDefStart;
-FSeek(scriptDefStart);
+ushort funcArrayPointer;
+FSeek(funcArrayPointer);
 
-SubScriptDef subScripts[numScripts] <optimize=false>;
+SubScriptDef subScripts[numFuncs] <optimize=false>;
