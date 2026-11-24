@@ -52,7 +52,7 @@ FSeek(SDHeader.funcsPointer);
 
 int numFuncs <bgcolor=0xffaaaa>;
 
-ushort funcArrayPointer;
+uint funcArrayPointer;
 FSeek(funcArrayPointer);
 
 SubScriptDef subScripts[numFuncs] <optimize=false>;
