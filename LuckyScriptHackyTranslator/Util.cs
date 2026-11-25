@@ -38,7 +38,7 @@ public class Util
         // We now repeatedly read the stream into a buffer and apply the Boyer-Moore-Horspool algorithm on the buffer until we get a match
         var buffer = new byte[Math.Max(2 * pattern.Length, 4096)];
         long offset = 0; // keep track of the offset in the input stream
-        while (true)
+        while (s.Position < s.Length)
         {
             int dataLength;
             if (offset == 0)
@@ -59,6 +59,7 @@ public class Util
                 return offset + index; // found!
             if (dataLength < buffer.Length)
                 break;
+            
             offset += dataLength - pattern.Length;
         }
 

@@ -19,12 +19,22 @@ public class DialogueEntry
             writer.WriteLine($"# Entry {entries.IndexOf(entry)}");
             writer.WriteLine(Convert.ToHexString(entry.Original));
                 
-            string cleanLine = entry.Translation.Replace("\n", "\\n").Replace("\r", "\\r");
-            writer.WriteLine($"# Original Japanese: {cleanLine}");
-            writer.WriteLine($"{cleanLine}");
+            string cleanLineOg =  Util.ShiftJis.GetShiftJis().GetString(entry.Original.Skip(2).ToArray()).Replace("\n", "\\n").Replace("\r", "\\r");
+            writer.WriteLine($"# Original Japanese: {cleanLineOg}");
+
+            string cleanLineTranslation = entry.Translation.Replace("\n", "\\n").Replace("\r", "\\r"); 
+            writer.WriteLine($"{cleanLineTranslation}");
                 
             writer.WriteLine("\n");
         }
+    }
+    
+    static internal bool _containsEntry(List<DialogueEntry> entries, DialogueEntry entry)
+    {
+        foreach (var e in entries)
+            if (e.Original.SequenceEqual(entry.Original))
+                return true;
+        return false;
     }
 
     static string? SkipCommentsWhiteSpace(StreamReader reader)
@@ -65,5 +75,36 @@ public class DialogueEntry
         }
 
         return entries;
+    }
+    
+    internal static void _mergeEntries(ref List<DialogueEntry> entries, List<DialogueEntry> inp)
+    {
+        foreach (var i in inp)
+        {
+            if (!_containsEntry(entries, i))
+            {
+                entries.Add(i);
+                continue;
+            }
+            
+            foreach (var e in entries)
+                if (e.Original.SequenceEqual(i.Original) && 
+                    !Util.ShiftJis.GetShiftJis().GetString(i.Original.Skip(2).ToArray()).TrimEnd().SequenceEqual(i.Translation.TrimEnd()))
+                    e.Translation = i.Translation;
+        }
+    }
+    
+    internal static List<DialogueEntry> _readTranslationFiles(IEnumerable<string> translationPaths)
+    {
+        List<DialogueEntry> result = new List<DialogueEntry>();
+        
+        foreach (var translation in translationPaths)
+        {
+            using StreamReader reader = new StreamReader(new FileStream(translation, FileMode.Open));
+            _mergeEntries(ref result, DialogueEntry.ReadEntries(reader));
+            reader.Close();
+        }
+
+        return result;
     }
 }

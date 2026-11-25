@@ -65,7 +65,7 @@ public class DialogueReader
         while (r.BaseStream.Position < r.BaseStream.Length)
         {
             var d = FindNextDialogue(r, ignoreEnglish);
-            if (d != null)
+            if (d != null && !DialogueEntry._containsEntry(entries, d))
                 entries.Add(d);
         }
 
